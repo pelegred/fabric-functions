@@ -80,8 +80,8 @@ function pos(el, position, cb) {
       break;
   }
   canvas.requestRenderAll();
-  console.log("mid-render");
-  setTimeout(cb, 1000);
+  console.log("in function before callback");
+  setTimeout(cb, 200);
 }
 
 function size(el, size) {
@@ -113,10 +113,21 @@ function fit(el) {
     }
   }
   if (totalWidth < canvas.width - 48) {
-    el.width = totalWidth * 1.1;
+    el.width = totalWidth * 1.05;
   } else {
     el.width = canvas.width - 48;
   }
-  console.log("hello");
-  // canvas.requestRenderAll();
+}
+
+function updateTextBg(el) {
+  rect.top = el.top + 8 ;
+  rect.left = el.left - 12;
+
+  rect.width = el.width + 24;
+  rect.height = el.height + 16;
+
+  rect.originX = el.originX;
+  rect.originY = el.originY;
+
+  rect.opacity = el.opacity;
 }

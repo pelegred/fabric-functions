@@ -1,35 +1,46 @@
 let canvas = new fabric.Canvas("c");
 
-let input = "Shop at amazon";
-// input = input + " and get 20% discount for free";
+// Setup
 
-let text = new fabric.Textbox(input, {
+let text = new fabric.Textbox("Shop at amazon", {
   fill: "white",
-  backgroundColor: "rgba(0,0,0,.7)",
+  opacity: 0
 });
 
-canvas.add(text);
+let rect = new fabric.Rect({
+  fill: 'rgba(0,0,0,.75)',
+  originX : text.originX,
+  originY : text.originY,
+  opcaity: 0
+});
+
+// Set Text Properties
 
 size(text, "m");
-pos(text, 1, () => {
+
+pos(text, 7, () => {
   canvas.renderAll();
-  console.log("renderall");
+  console.log("renderall on callback");
 });
 
-// can only use fit() after the event "after:render"
-// because the text need to be rendered
+// Adding and rendering elements to canvas
+
+canvas.add(rect);
+canvas.add(text);
+
+// Using the render event to fit text and update bg
+
 canvas.on("after:render", function () {
   fit(text);
-  console.log("after-render");
+  updateTextBg(text);
+  console.log("after-render event fired");
 });
 
-// text.animate("left", 100);
+// Animating the text
 
-// todo:
-// on window refresh - set the commands to be pos-top-left, size-m, fit
-// consider always making full width, and draw rect based on lines
-
-// caption background
-// animate
-// trello
-// zip
+text.animate({'left': '+=8', 'opacity': '+=1'}, { 
+  from: 0,
+  onChange: canvas.renderAll.bind(canvas),
+  duration: 1000,
+  easing: fabric.util.ease.easeInCubic
+});
