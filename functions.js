@@ -1,133 +1,163 @@
-function pos(el, position, cb) {
-  const coords = {
-    xl: 24,
-    xc: canvas.width / 2,
-    xr: canvas.width - 24,
-    yt: 24,
-    yc: canvas.height / 2,
-    yb: canvas.height - 24,
-  };
+let hi, vi;
+
+function textPosition(text, position, cb) {
   switch (position) {
     case 1:
-      el.originX = "left";
-      el.originY = "top";
-      el.left = coords.xl;
-      el.top = coords.yt;
-      el.textAlign = "left";
+      text.originX = "left";
+      text.originY = "top";
+      text.left = coords.xl;
+      text.top = coords.yt;
+      text.textAlign = "left";
+      hi = -1;
+      vi = -1;
       break;
     case 2:
-      el.originX = "center";
-      el.originY = "top";
-      el.left = coords.xc;
-      el.top = coords.yt;
-      el.textAlign = "center";
+      text.originX = "center";
+      text.originY = "top";
+      text.left = coords.xc;
+      text.top = coords.yt;
+      text.textAlign = "center";
+      hi = 0;
+      vi = -1;
       break;
     case 3:
-      el.originX = "right";
-      el.originY = "top";
-      el.left = coords.xr;
-      el.top = coords.yt;
-      el.textAlign = "right";
+      text.originX = "right";
+      text.originY = "top";
+      text.left = coords.xr;
+      text.top = coords.yt;
+      text.textAlign = "right";
+      hi = 1;
+      vi = -1;
       break;
     case 4:
-      el.originX = "left";
-      el.originY = "center";
-      el.left = coords.xl;
-      el.top = coords.yc;
-      el.textAlign = "left";
+      text.originX = "left";
+      text.originY = "center";
+      text.left = coords.xl;
+      text.top = coords.yc;
+      text.textAlign = "left";
+      hi = -1;
+      vi = 0;
       break;
     case 5:
-      el.originX = "center";
-      el.originY = "center";
-      el.left = coords.xc;
-      el.top = coords.yc;
-      el.textAlign = "center";
+      text.originX = "center";
+      text.originY = "center";
+      text.left = coords.xc;
+      text.top = coords.yc;
+      text.textAlign = "center";
+      hi = 0;
+      vi = 0;
       break;
     case 6:
-      el.originX = "right";
-      el.originY = "center";
-      el.left = coords.xr;
-      el.top = coords.yc;
-      el.textAlign = "right";
+      text.originX = "right";
+      text.originY = "center";
+      text.left = coords.xr;
+      text.top = coords.yc;
+      text.textAlign = "right";
+      hi = 1;
+      vi = 0;
       break;
     case 7:
-      el.originX = "left";
-      el.originY = "bottom";
-      el.left = coords.xl;
-      el.top = coords.yb;
-      el.textAlign = "left";
+      text.originX = "left";
+      text.originY = "bottom";
+      text.left = coords.xl;
+      text.top = coords.yb;
+      text.textAlign = "left";
+      hi = -1;
+      vi = 1;
       break;
     case 8:
-      el.originX = "center";
-      el.originY = "bottom";
-      el.left = coords.xc;
-      el.top = coords.yb;
-      el.textAlign = "center";
+      text.originX = "center";
+      text.originY = "bottom";
+      text.left = coords.xc;
+      text.top = coords.yb;
+      text.textAlign = "center";
+      hi = 0;
+      vi = 1;
       break;
     case 9:
-      el.originX = "right";
-      el.originY = "bottom";
-      el.left = coords.xr;
-      el.top = coords.yb;
-      el.textAlign = "right";
+      text.originX = "right";
+      text.originY = "bottom";
+      text.left = coords.xr;
+      text.top = coords.yb;
+      text.textAlign = "right";
+      hi = 1;
+      vi = 1;
       break;
     default:
-      el.originX = "center";
-      el.originY = "center";
-      el.left = coords.xc;
-      el.top = coords.yc;
-      el.textAlign = "center";
+      text.originX = "center";
+      text.originY = "center";
+      text.left = coords.xc;
+      text.top = coords.yc;
+      text.textAlign = "center";
+      hi = 0;
+      vi = 0;
       break;
   }
-  canvas.requestRenderAll();
-  console.log("in function before callback");
   setTimeout(cb, 200);
 }
 
-function size(el, size) {
-  let x;
+function textSize(text, size) {
   switch (size) {
     case "s":
-      x = 16;
+      text.fontSize = 16;
       break;
     case "m":
-      x = 24;
+      text.fontSize = 24;
       break;
     case "l":
-      x = 30;
+      text.fontSize = 30;
       break;
     case "xl":
-      x = 48;
+      text.fontSize = 48;
       break;
   }
-  el.fontSize = x;
-  canvas.requestRenderAll();
 }
 
-function fit(el) {
-  let bounds = el.__charBounds;
+function textFit(text) {
+  // ---------- get totalWidth ----------
+  let bounds = text.__charBounds;
   let totalWidth = 0;
   for (let i = 0; i < bounds.length; i++) {
     for (let j = 0; j < bounds[i].length; j++) {
       totalWidth += bounds[i][j].width;
     }
   }
-  if (totalWidth < canvas.width - 48) {
-    el.width = totalWidth * 1.05;
+  // ---------- /get totalWidth ----------
+  if (totalWidth < mycanvas.width - 48) {
+    text.width = totalWidth * 1.05;
   } else {
-    el.width = canvas.width - 48;
+    text.width = mycanvas.width - 48;
   }
 }
 
-function updateTextBg(el) {
-  rect.top = el.top + 8 ;
-  rect.left = el.left - 12;
+function updateBase(text, base) {
+  base.originX = text.originX;
+  base.originY = text.originY;
 
-  rect.width = el.width + 24;
-  rect.height = el.height + 16;
+  base.left = text.left + 10 * hi;
+  base.top = text.top + 10 * vi;
 
-  rect.originX = el.originX;
-  rect.originY = el.originY;
+  base.width = text.width + 20;
+  base.height = text.height + 20;
 
-  rect.opacity = el.opacity;
+  base.opacity = text.opacity;
+}
+
+function animationSlide(text, duration) {
+  text.animate(
+    { left: "+=0" },
+    {
+      from: text.left - 48,
+      onChange: mycanvas.renderAll.bind(mycanvas),
+      duration: duration,
+      easing: fabric.util.ease.easeInCubic,
+    }
+  );
+  text.animate(
+    { opacity: "+=1" },
+    {
+      from: 0,
+      duration: duration,
+    }
+  );
 }

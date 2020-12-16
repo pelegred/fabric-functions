@@ -1,46 +1,46 @@
-let canvas = new fabric.Canvas("c");
+let mycanvas = new fabric.StaticCanvas("c");
 
-// Setup
+const coords = {
+  xl: 24,
+  xc: mycanvas.width / 2,
+  xr: mycanvas.width - 24,
+  yt: 24,
+  yc: mycanvas.height / 2,
+  yb: mycanvas.height - 24,
+};
 
-let text = new fabric.Textbox("Shop at amazon", {
-  fill: "white",
-  opacity: 0
+let mytext = new fabric.Textbox("Shop at amazon", {
+  fill: "pink",
+  // backgroundColor: "red",
+  opacity: 0,
 });
 
-let rect = new fabric.Rect({
-  fill: 'rgba(0,0,0,.75)',
-  originX : text.originX,
-  originY : text.originY,
-  opcaity: 0
+let mybase = new fabric.Rect({
+  fill: "rgba(0,0,0,.75)",
+  originX: mytext.originX,
+  originY: mytext.originY,
+  opacity: 0,
 });
 
-// Set Text Properties
+// ----------------------------------------------------------------------
 
-size(text, "m");
+textSize(mytext, "m");
 
-pos(text, 7, () => {
-  canvas.renderAll();
-  console.log("renderall on callback");
+textPosition(mytext, 5, () => {
+  mycanvas.renderAll(); // Force after:render
 });
 
-// Adding and rendering elements to canvas
+// ----------------------------------------------------------------------
 
-canvas.add(rect);
-canvas.add(text);
+animationSlide(mytext, 1000);
 
-// Using the render event to fit text and update bg
+mycanvas.add(mybase);
+mycanvas.add(mytext);
 
-canvas.on("after:render", function () {
-  fit(text);
-  updateTextBg(text);
-  console.log("after-render event fired");
+mycanvas.on("after:render", function () {
+  textFit(mytext);
+  updateBase(mytext, mybase);
 });
 
-// Animating the text
-
-text.animate({'left': '+=8', 'opacity': '+=1'}, { 
-  from: 0,
-  onChange: canvas.renderAll.bind(canvas),
-  duration: 1000,
-  easing: fabric.util.ease.easeInCubic
-});
+mycanvas.renderAll();
+mycanvas.renderAll();
